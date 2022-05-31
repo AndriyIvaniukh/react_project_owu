@@ -1,10 +1,21 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
+import {movieService} from "./services";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {MainLayout} from "./layouts";
+import {MoviePages} from "./pages";
+import {MovieDetailsPage} from "./pages/MovieDetailsPage";
 
 const App: FC = () => {
+
   return (
-      <div>
-        App
-      </div>
+      <Routes>
+          <Route path={'/'} element={<MainLayout/>}>
+              <Route index element={<Navigate to={'/movies'}/>}/>
+              <Route path={'movies'} element={<MoviePages/>}>
+              </Route>
+              <Route path={'movieDetails'} element={<MovieDetailsPage/>}/>
+          </Route>
+      </Routes>
   );
 };
 

@@ -13,7 +13,7 @@ const App: FC = () => {
               <Route index element={<Navigate to={'/movies'}/>}/>
               <Route path={'movies'} element={<MoviePages/>}>
               </Route>
-              <Route path={'movieDetails'} element={<MovieDetailsPage/>}/>
+              <Route path={'movies/:id'} element={<MovieDetailsPage/>}/>
           </Route>
       </Routes>
   );

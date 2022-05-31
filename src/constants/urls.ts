@@ -4,7 +4,8 @@ const imgURL = process.env.REACT_APP_API_IMG;
 
 const urls ={
     movies: '/discover/movie',
-    genres: '/genre/movie/list'
+    genres: '/genre/movie/list',
+    movie: '/movie'
 }
 
 export {

@@ -1,24 +1,36 @@
-import React, {FC} from 'react';
-import {useLocation} from "react-router-dom";
+import React, {FC, useEffect} from 'react';
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "../../hook";
+import {movieActions} from "../../redux";
+import {imgURL} from "../../constants";
 import {IMovie} from "../../interfaces";
 
-interface ILocation {
+type patchNameType = {
     pathname: string
-    state: IMovie
-    search: string
-    hash: string
-    key: string
+}
+type movieType = {
+    movie: IMovie
 }
 
 const MovieDetailsPage: FC = () => {
 
-    const {state} = useLocation();
-    console.log(state)
+    const navigate = useNavigate();
+    const {id} = useParams<string>();
+    const location = useLocation();
+    const {pathname} = location.state as patchNameType;
+    const {movie} = location.state as movieType;
+
+    const {original_title, poster_path} = movie;
+
     return (
         <div>
-            MovieDetailsPage
+            <button onClick={() => {
+                navigate(`${pathname}`)
+            }}>Back
+            </button>
+            {original_title && <h2>{original_title}</h2>}
+            {poster_path && <img src={`${imgURL}${poster_path}`} alt="poster"/>}
         </div>
     );
 };
-
 export {MovieDetailsPage};

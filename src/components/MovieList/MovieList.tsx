@@ -6,6 +6,7 @@ import {movieActions} from "../../redux";
 import {MovieListCard} from "../MovieListCard/MovieListCard";
 
 import css from './movieList.module.css';
+import {Outlet} from "react-router-dom";
 
 const MovieList: FC = () => {
 

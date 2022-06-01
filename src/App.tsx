@@ -1,6 +1,6 @@
-import React, {FC, useEffect} from 'react';
-import {movieService} from "./services";
+import React, {FC} from 'react';
 import {Navigate, Route, Routes} from "react-router-dom";
+
 import {MainLayout} from "./layouts";
 import {MoviePages} from "./pages";
 import {MovieDetailsPage} from "./pages/MovieDetailsPage";

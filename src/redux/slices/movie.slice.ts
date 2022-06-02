@@ -2,12 +2,14 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {IMovie, IMovieRequest} from "../../interfaces";
 import {movieService} from "../../services";
 import {IQuery} from "../../interfaces/queryParams.interface";
+import {IMovieSearch} from "../../interfaces/movieSearch.interface";
 
 interface IState {
     movieRequest: IMovieRequest
     movieDetails?: IMovie
     genresFilter?: number[]
     queryParams?: IQuery
+    searchFilm?:  null | string
 }
 
 const initialState: IState = {
@@ -18,7 +20,8 @@ const initialState: IState = {
         total_results: 0
     },
     genresFilter: [],
-    queryParams: {}
+    queryParams: {},
+    searchFilm: null
 };
 
 const getAll = createAsyncThunk<IMovieRequest, IQuery>(
@@ -36,6 +39,31 @@ const getById = createAsyncThunk<IMovie, string>(
         return data;
     }
 );
+
+const searchMovie = createAsyncThunk<IMovieRequest, IMovieSearch>(
+    'movieSlice/searchMovie',
+    async (params: IMovieSearch) => {
+        const {data} = await movieService.searchFilm(params);
+        return data;
+    }
+);
+
+const getTopRated = createAsyncThunk<IMovieRequest, IMovieSearch>(
+    'movieSlice/getTopRated',
+    async (params: IMovieSearch) => {
+        const {data} = await movieService.getTopRated(params);
+        return data;
+    }
+);
+
+const getLatest = createAsyncThunk<IMovieRequest, IMovieSearch>(
+    'movieSlice/gatLatest',
+    async (params: IMovieSearch) => {
+        const {data} = await movieService.getLatest(params);
+        return data;
+    }
+);
+
 
 const movieSlice = createSlice({
     name: 'movieSlice',
@@ -61,6 +89,20 @@ const movieSlice = createSlice({
         deletePagesFromQueryParams: state => {
             state.queryParams = {page: '1', genres: state.queryParams?.genres || ''};
         },
+        clearAll: state => {
+            state.genresFilter = [];
+            state.queryParams = {};
+            state.movieRequest = {
+                page: 1,
+                results: [],
+                total_pages: 0,
+                total_results: 0
+            }
+            state.searchFilm = null;
+        },
+        addSearchFilm: (state, action) => {
+            state.searchFilm = action.payload;
+        }
 
 
     },
@@ -72,11 +114,31 @@ const movieSlice = createSlice({
             .addCase(getById.fulfilled, (state, action) => {
                 state.movieDetails = action.payload;
             })
+            .addCase(searchMovie.fulfilled, (state, action) => {
+                state.movieRequest = action.payload;
+            })
+            .addCase(getTopRated.fulfilled, (state, action) => {
+                state.movieRequest = action.payload
+            })
+            .addCase(getLatest.fulfilled, (state, action) => {
+                state.movieRequest = action.payload
+            })
 
     }
 });
 
-const {reducer: movieReducer, actions: {deleteAllGenres, addGenres, deleteGenresById,saveQueryParams,deleteQueryParams,deletePagesFromQueryParams}} = movieSlice;
+const {
+    reducer: movieReducer, actions: {
+        deleteAllGenres,
+        addGenres,
+        deleteGenresById,
+        saveQueryParams,
+        deleteQueryParams,
+        deletePagesFromQueryParams,
+        clearAll,
+        addSearchFilm
+    }
+} = movieSlice;
 
 const movieActions = {
     getAll,
@@ -86,8 +148,12 @@ const movieActions = {
     deleteGenresById,
     saveQueryParams,
     deleteQueryParams,
-    deletePagesFromQueryParams
-
+    deletePagesFromQueryParams,
+    clearAll,
+    searchMovie,
+    addSearchFilm,
+    getTopRated,
+    getLatest
 }
 
 export {

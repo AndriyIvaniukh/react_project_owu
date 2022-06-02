@@ -8,5 +8,14 @@
 .button{
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
+    column-gap: 20px;
+}
+
+.button button{
+    border-radius:25px ;
+}
+
+.page{
+    padding: 0 0 40px 0;
 }

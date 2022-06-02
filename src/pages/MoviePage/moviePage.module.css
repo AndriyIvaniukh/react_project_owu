@@ -1,6 +1,6 @@
 .page{
     display: flex;
     flex-direction: row;
+    column-gap: 20px;
     justify-content: space-around;
-    /*column-gap: 10px;*/
 }

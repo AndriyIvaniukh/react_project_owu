@@ -6,7 +6,9 @@ const noImage = 'https://sd.keepcalms.com/i/keep-calm-but-sorry-no-poster.png';
 const urls ={
     movies: '/discover/movie',
     genres: '/genre/movie/list',
-    movie: '/movie'
+    movie: '/movie',
+    topRated: '/movie/top_rated',
+    latest: '/movie/now_playing'
 }
 
 export {

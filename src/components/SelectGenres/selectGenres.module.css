@@ -4,8 +4,12 @@
     min-width: 160px;
     list-style : none;
     padding-inline-start: 0;
-    margin: 0;
+    height: 440px;
     padding: 5px 10px;
+    margin: 10px;
+    background-color: #cccccc;
+    border: 2px solid #747474;
+    border-radius: 15px;
 }
 
 .genres ul{

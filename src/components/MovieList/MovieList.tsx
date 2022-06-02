@@ -15,7 +15,7 @@ interface IProps {
 
 const MovieList: FC<IProps> = ({setChanged, changed}) => {
 
-    const {movieRequest, genresFilter, queryParams} = useAppSelector(state => state.movieReducer);
+    const {movieRequest, genresFilter, queryParams, searchFilm} = useAppSelector(state => state.movieReducer);
     const dispatch = useAppDispatch();
 
     const {page: currentPage, total_pages} = movieRequest;
@@ -28,13 +28,22 @@ const MovieList: FC<IProps> = ({setChanged, changed}) => {
     const prevPage = (): void => {
         let page = query?.get('page') || 1;
         page = +page - 1;
-        setQuery({page: page.toString(), genres: query.get('genres') || ''});
+        if (query.get('genres')) {
+            setQuery({page: page.toString(), genres: query.get('genres') || ''});
+        } else {
+            setQuery({page: page.toString()});
+        }
         dispatch(movieActions.saveQueryParams({queryParams: {page: page, genres: queryParams?.genres}}))
     }
+
     const nextPage = (): void => {
         let page = query?.get('page') || 1;
         page = +page + 1;
-        setQuery({page: page.toString(), genres: query.get('genres') || ''});
+        if (query.get('genres')) {
+            setQuery({page: page.toString(), genres: query.get('genres') || ''});
+        } else {
+            setQuery({page: page.toString()});
+        }
         dispatch(movieActions.saveQueryParams({queryParams: {page: page, genres: queryParams?.genres}}))
     }
 
@@ -50,35 +59,45 @@ const MovieList: FC<IProps> = ({setChanged, changed}) => {
     }
 
     const disableNextButton = (): boolean => {
-        if (currentPage >= movieRequest.total_pages - 1) {
+        if (currentPage >= movieRequest.total_pages) {
             return true
         } else return false
     }
 
     useEffect(() => {
-        if(changed){
+        if (changed) {
             console.log('change');
             setGenresQuery();
             setChanged(false);
-        }else if(!genres.length){
+        } else if (!genres.length) {
             setQuery({})
         }
     }, [changed])
 
     useEffect(() => {
-        dispatch(movieActions.getAll(params));
-    }, [dispatch, query])
+        if (!searchFilm) {
+            dispatch(movieActions.getAll(params));
+        } else if (searchFilm === 'bestRates') {
+            dispatch(movieActions.getTopRated({name: 'bestRates', params}));
+        } else if (searchFilm === 'latestFilms') {
+            dispatch(movieActions.getLatest({name: 'latestFilms', params}));
+        } else {
+            dispatch(movieActions.searchMovie({name: searchFilm, params}));
+        }
+
+    }, [dispatch, searchFilm, query])
 
 
     console.log('movielist')
+
     return (
-        <div>
+        <div className={css.page}>
             <div className={css.cards}>
                 {movieRequest.results.map(movie => <MovieListCard key={movie.id} movie={movie}/>)}
             </div>
             <div className={css.button}>
                 <button disabled={disablePrevButton()} onClick={() => prevPage()}>prev</button>
-                <div style={{display:"flex"}}>
+                <div style={{display: "flex"}}>
                     <h2>{currentPage} of {total_pages}</h2>
                 </div>
                 <button disabled={disableNextButton()} onClick={() => nextPage()}>next</button>

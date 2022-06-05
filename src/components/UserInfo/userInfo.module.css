@@ -1,0 +1,17 @@
+.userInfo{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 15px;
+    align-items: center;
+    font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
+    color: #59a98b;
+    font-size: 20px;
+}
+
+.userInfo img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}

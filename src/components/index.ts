@@ -4,3 +4,7 @@ export * from './Genre';
 export * from './SearchForm';
 export * from './SelectGenres';
 export * from './MovieListCard';
+export * from './MovieDetails';
+export * from './StarRating';
+export * from './UserInfo';
+export * from './Footer';

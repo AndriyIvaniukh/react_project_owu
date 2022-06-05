@@ -1,0 +1,40 @@
+.page {
+    margin: 20px;
+    width: 1200px;
+    padding: 25px;
+    background: rgba(204,204,204, 0.4);
+    border: 2px solid #747474;
+    border-radius: 15px;
+}
+
+.button{
+    margin-left: 20px;
+    width: 70px;
+}
+
+.button img {
+    height: 70px;
+    width: 70px;
+    background: none;
+}
+
+.details_part {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+    padding-top: 20px;
+}
+
+.aboutMovie{
+    padding: 0 40px;
+}
+
+.page h2{
+    font-size: 30px;
+    font-family: 'Tinos', serif;
+}
+
+.page span {
+    font-size: 24px;
+    font-family: 'Tinos', serif;
+}

@@ -1,6 +1,6 @@
 .head {
     background-color: #071f42;
-    height: 64px;
+    height: 90px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -8,12 +8,31 @@
 }
 
 .head img {
-    width: 154px;
     height: 20px;
 }
 
 .head p {
-    color: white;
-    font-size: 16px;
+    color: #59a98b;
+    font-size: 20px;
+    font-weight: bold;
     font-family: 'Open Sans', sans-serif;
+}
+
+.rightSide{
+    display: flex;
+    flex-direction: row;
+    column-gap: 30px;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.switcher{
+    height: 40px;
+    width: 60px;
+    border-radius: 50%;
+    background-color: #bcbcbc;
+}
+
+.userInfo{
+    margin-left: 70px;
 }

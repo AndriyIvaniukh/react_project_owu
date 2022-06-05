@@ -1,13 +1,17 @@
-import React, {FC} from 'react';
-
-
-import css from './header.module.css'
+import React, {FC, useState} from 'react';
 import {useNavigate} from "react-router-dom";
+
 import {SearchForm} from "../SearchForm";
 import {useAppDispatch} from "../../hook";
-import {movieActions} from "../../redux";
+import {movieActions, themeAction} from "../../redux";
+import Switch from '@mui/material/Switch';
+
+import css from './header.module.css'
+import {UserInfo} from "../UserInfo";
+
 
 const Header: FC = () => {
+
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
@@ -24,27 +28,44 @@ const Header: FC = () => {
 
     const goToBestRates = () => {
         clearPreviousState();
-        dispatch(movieActions.addSearchFilm('bestRates'));
-        dispatch(movieActions.getTopRated({}));
-        navigate('/');
+        dispatch(movieActions.topRatedPage());
+        navigate('/bestFilms');
     }
 
     const goToLatest = () => {
         clearPreviousState();
-        dispatch(movieActions.addSearchFilm('latestFilms'));
-        dispatch(movieActions.getLatest({}));
-        navigate('/');
+        dispatch(movieActions.nowInCinemaPage());
+        navigate('/nowInCinemas');
     }
+
+    const [checked, setChecked] = useState<boolean>(false);
+    const handleChange = () => {
+        setChecked(!checked);
+        dispatch(themeAction.changeTheme())
+    }
+
     return (
         <div className={css.head}>
             <div style={{display: "flex", justifyContent: "center", alignItems: 'center', columnGap: '25px'}}>
-                <img src={logoImgDirection} alt="logo"/>
-                <p onClick={goToFilm}>Film</p>
-                <p onClick={goToBestRates}>Best Rates</p>
+                <img onClick={goToFilm} src={logoImgDirection} alt="logo"/>
+                <p onClick={goToFilm}>Films</p>
+                <p onClick={goToBestRates}>Best Films</p>
                 <p onClick={goToLatest}>Now In Cinemas</p>
             </div>
-            <div>
-                <SearchForm/>
+            <div className={css.rightSide}>
+                <div>
+                    <SearchForm/>
+                </div>
+                <div className={css.switcher}>
+                    <Switch
+                        checked={checked}
+                        onChange={handleChange}
+                        inputProps={{'aria-label': 'controlled'}}
+                    />
+                </div>
+                <div className={css.userInfo}>
+                    <UserInfo/>
+                </div>
             </div>
         </div>
     );

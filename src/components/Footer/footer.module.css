@@ -1,0 +1,19 @@
+.footer {
+    background-color: #071f42;
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 150px;
+}
+
+.footer img {
+    width: 154px;
+    height: 20px;
+}
+
+.footer p {
+    color: white;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+}

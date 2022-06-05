@@ -1,10 +1,10 @@
-import React, {FC, useEffect,} from 'react';
+import React, {FC,useEffect} from 'react';
 import {useSearchParams} from 'react-router-dom'
 
 import {useAppDispatch, useAppSelector} from "../../hook";
 import {movieActions} from "../../redux";
 import {MovieListCard} from "../MovieListCard";
-import {IQuery} from "../../interfaces/queryParams.interface";
+import {IQuery} from "../../interfaces";
 
 import css from './movieList.module.css';
 
@@ -15,7 +15,7 @@ interface IProps {
 
 const MovieList: FC<IProps> = ({setChanged, changed}) => {
 
-    const {movieRequest, genresFilter, queryParams, searchFilm} = useAppSelector(state => state.movieReducer);
+    const {movieRequest, genresFilter, queryParams, searchFilm,nowInCinema,topRated} = useAppSelector(state => state.movieReducer);
     const dispatch = useAppDispatch();
 
     const {page: currentPage, total_pages} = movieRequest;
@@ -23,7 +23,8 @@ const MovieList: FC<IProps> = ({setChanged, changed}) => {
 
     const params = queryParams as IQuery;
 
-    const [query, setQuery] = useSearchParams({page: params?.page || '', genres: params?.genres || ''});
+    const searchParams = useSearchParams({page: params?.page || '', genres: params?.genres || ''});
+    const [query, setQuery] = searchParams;
 
     const prevPage = (): void => {
         let page = query?.get('page') || 1;
@@ -33,7 +34,7 @@ const MovieList: FC<IProps> = ({setChanged, changed}) => {
         } else {
             setQuery({page: page.toString()});
         }
-        dispatch(movieActions.saveQueryParams({queryParams: {page: page, genres: queryParams?.genres}}))
+        dispatch(movieActions.saveQueryParams({queryParams: {page: page, genres: query.get('genres')}}))
     }
 
     const nextPage = (): void => {
@@ -66,7 +67,6 @@ const MovieList: FC<IProps> = ({setChanged, changed}) => {
 
     useEffect(() => {
         if (changed) {
-            console.log('change');
             setGenresQuery();
             setChanged(false);
         } else if (!genres.length) {
@@ -75,20 +75,17 @@ const MovieList: FC<IProps> = ({setChanged, changed}) => {
     }, [changed])
 
     useEffect(() => {
-        if (!searchFilm) {
-            dispatch(movieActions.getAll(params));
-        } else if (searchFilm === 'bestRates') {
-            dispatch(movieActions.getTopRated({name: 'bestRates', params}));
-        } else if (searchFilm === 'latestFilms') {
-            dispatch(movieActions.getLatest({name: 'latestFilms', params}));
-        } else {
+        if(nowInCinema){
+            dispatch(movieActions.getLatest({params}));
+        }else if(topRated){
+            dispatch(movieActions.getTopRated({params}));
+        }else if(searchFilm){
             dispatch(movieActions.searchMovie({name: searchFilm, params}));
+        }else{
+            dispatch(movieActions.getAll(params));
         }
+    }, [dispatch, searchFilm, query, nowInCinema, topRated])
 
-    }, [dispatch, searchFilm, query])
-
-
-    console.log('movielist')
 
     return (
         <div className={css.page}>
@@ -102,7 +99,6 @@ const MovieList: FC<IProps> = ({setChanged, changed}) => {
                 </div>
                 <button disabled={disableNextButton()} onClick={() => nextPage()}>next</button>
             </div>
-
         </div>
     );
 };

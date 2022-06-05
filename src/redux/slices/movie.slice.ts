@@ -1,15 +1,20 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {IMovie, IMovieRequest} from "../../interfaces";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+
+import {IMovie, IMovieRequest, IQuery, IMovieSearch} from "../../interfaces";
 import {movieService} from "../../services";
-import {IQuery} from "../../interfaces/queryParams.interface";
-import {IMovieSearch} from "../../interfaces/movieSearch.interface";
+
+type typeId={
+    id: number
+}
 
 interface IState {
     movieRequest: IMovieRequest
     movieDetails?: IMovie
     genresFilter?: number[]
-    queryParams?: IQuery
-    searchFilm?:  null | string
+    queryParams: IQuery
+    searchFilm:  null | string
+    topRated: boolean
+    nowInCinema: boolean
 }
 
 const initialState: IState = {
@@ -21,7 +26,9 @@ const initialState: IState = {
     },
     genresFilter: [],
     queryParams: {},
-    searchFilm: null
+    searchFilm: null,
+    nowInCinema: false,
+    topRated: false
 };
 
 const getAll = createAsyncThunk<IMovieRequest, IQuery>(
@@ -69,18 +76,18 @@ const movieSlice = createSlice({
     name: 'movieSlice',
     initialState,
     reducers: {
-        addGenres: (state: IState, action): void => {
-            const genres = action.payload.id as number;
+        addGenres: (state: IState, action:PayloadAction<typeId>): void => {
+            const genres = action.payload.id;
             state.genresFilter?.push(genres);
         },
-        deleteGenresById: (state, action): void => {
-            const elIndex = state.genresFilter?.findIndex((ell) => ell === action.payload.id) as number;
-            state.genresFilter?.splice(elIndex, 1)
+        deleteGenresById: (state: IState, action:PayloadAction<typeId>): void => {
+            const elIndex = state.genresFilter?.findIndex((ell) => ell === action.payload.id);
+            state.genresFilter?.splice(elIndex as number, 1)
         },
-        deleteAllGenres: (state) => {
+        deleteAllGenres: (state:IState) => {
             state.genresFilter = [];
         },
-        saveQueryParams: (state: IState, action) => {
+        saveQueryParams: (state: IState, action:PayloadAction<any> ) => {
             state.queryParams = action.payload.queryParams;
         },
         deleteQueryParams: state => {
@@ -99,28 +106,34 @@ const movieSlice = createSlice({
                 total_results: 0
             }
             state.searchFilm = null;
+            state.nowInCinema = false;
+            state.topRated = false
         },
-        addSearchFilm: (state, action) => {
+        addSearchFilm: (state:IState, action:PayloadAction<string>) => {
             state.searchFilm = action.payload;
+        },
+        topRatedPage: (state:IState) => {
+            state.topRated = true;
+        },
+        nowInCinemaPage: (state: IState) =>{
+            state.nowInCinema = true
         }
-
-
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getAll.fulfilled, (state, action) => {
+            .addCase(getAll.fulfilled, (state: IState, action) => {
                 state.movieRequest = action.payload;
             })
-            .addCase(getById.fulfilled, (state, action) => {
+            .addCase(getById.fulfilled, (state: IState, action) => {
                 state.movieDetails = action.payload;
             })
-            .addCase(searchMovie.fulfilled, (state, action) => {
+            .addCase(searchMovie.fulfilled, (state:IState, action) => {
                 state.movieRequest = action.payload;
             })
-            .addCase(getTopRated.fulfilled, (state, action) => {
+            .addCase(getTopRated.fulfilled, (state:IState, action) => {
                 state.movieRequest = action.payload
             })
-            .addCase(getLatest.fulfilled, (state, action) => {
+            .addCase(getLatest.fulfilled, (state:IState, action) => {
                 state.movieRequest = action.payload
             })
 
@@ -136,7 +149,9 @@ const {
         deleteQueryParams,
         deletePagesFromQueryParams,
         clearAll,
-        addSearchFilm
+        addSearchFilm,
+        topRatedPage,
+        nowInCinemaPage
     }
 } = movieSlice;
 
@@ -153,7 +168,9 @@ const movieActions = {
     searchMovie,
     addSearchFilm,
     getTopRated,
-    getLatest
+    getLatest,
+    topRatedPage,
+    nowInCinemaPage
 }
 
 export {

@@ -1,0 +1,23 @@
+.searchForm{
+    position: relative;
+
+}
+.searchForm input{
+    height: 35px;
+    width: 300px;
+    background-color: azure;
+    border-radius: 15px;
+}
+
+.searchButton{
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    border: none;
+}
+
+.searchButton img{
+    width: 20px;
+    height: 20px;
+
+}

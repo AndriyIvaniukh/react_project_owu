@@ -1,9 +1,8 @@
 import {axiosService, Res} from "./axios.service";
+
 import {urls} from "../constants";
-import {IGenre, IMovie, IMovieRequest} from "../interfaces";
-import {IGenresRequest} from "../interfaces/genresRequest.interface";
-import {IQuery} from "../interfaces/queryParams.interface";
-import {IMovieSearch} from "../interfaces/movieSearch.interface";
+import {IMovie, IMovieRequest, IGenresRequest,IQuery,IMovieSearch} from "../interfaces";
+
 
 const movieService = {
     getAllMovies: (params: IQuery):Res<IMovieRequest> => {
@@ -25,16 +24,15 @@ const movieService = {
     }),
     getTopRated: (params: IMovieSearch): Res<IMovieRequest> => axiosService.get(urls.topRated,{
         params:{
-            query: params.name,
             page: params?.params?.page,
         }
     }),
     getLatest: (params: IMovieSearch): Res<IMovieRequest> => axiosService.get(urls.latest,{
         params:{
-            query: params.name,
             page: params?.params?.page,
         }
     }),
+    setYourRating: (id: string, yourRating: number) => axiosService.post(`${urls.movie}/${id}/rating`, yourRating)
 }
 
 

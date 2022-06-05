@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+
 import {movieService} from "../../services";
-import {IGenresRequest} from "../../interfaces/genresRequest.interface";
+import {IGenresRequest} from "../../interfaces";
 
 interface IState {
     genreRequest: IGenresRequest
@@ -26,13 +27,13 @@ const genresSlice = createSlice({
     reducers: {},
     extraReducers: builder => {
         builder
-            .addCase(getAll.fulfilled, (state, action) => {
+            .addCase(getAll.fulfilled, (state: IState, action) => {
                 state.genreRequest = action.payload;
             })
     }
 });
 
-const {reducer: genresReducer, actions: {}} = genresSlice;
+const {reducer: genresReducer} = genresSlice;
 
 const genderActions = {
     getAll

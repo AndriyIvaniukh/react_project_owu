@@ -3,14 +3,21 @@ import {useNavigate} from "react-router-dom";
 
 import {SearchForm} from "../SearchForm";
 import {useAppDispatch} from "../../hook";
-import {movieActions, themeAction} from "../../redux";
+import {movieActions} from "../../redux";
 import Switch from '@mui/material/Switch';
 
 import css from './header.module.css'
 import {UserInfo} from "../UserInfo";
 
 
-const Header: FC = () => {
+interface IState{
+    nightTheme: {
+        nightMode: boolean,
+        setNightMode: (nightMode: boolean) => void
+    }
+}
+
+const Header: FC<IState>= ({nightTheme:{nightMode,setNightMode}}) => {
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -41,7 +48,7 @@ const Header: FC = () => {
     const [checked, setChecked] = useState<boolean>(false);
     const handleChange = () => {
         setChecked(!checked);
-        dispatch(themeAction.changeTheme())
+        setNightMode(!nightMode);
     }
 
     return (
